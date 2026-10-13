@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مبروك هدى! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --color1: #a18cd1;
+            --color2: #fbc2eb;
+            --card-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, var(--color1), var(--color2));
+            margin: 0;
+            padding: 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            direction: rtl;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* رسالة الاعتذار */
+        .apology-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin: 1rem;
+            color: white;
+            text-align: center;
+            width: 95%;
+            max-width: 600px;
+            transition: transform 0.2s;
+        }
+
+        .apology-card:active {
+            transform: scale(0.98);
+        }
+
+        /* العنوان الرئيسي */
+        h1 {
+            color: white;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 1rem 0;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        /* بطاقات التهاني */
+        .cards-container {
+            width: 100%;
+            max-width: 600px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card h2 {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .emoji {
+            margin-left: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* شريط التقدم */
+        .progress-container {
+            width: 90%;
+            max-width: 500px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fff, #fbc2eb);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 75%;
+        }
+
+        /* أزرار المشاركة */
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .share-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 50px; /* إضافة عرض ثابت */
+            min-height: 50px; /* إضافة ارتفاع ثابت */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* تأثيرات الجوال المخصصة */
+        @media (min-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            .card { padding: 1.2rem; }
+            .card h2 { font-size: 1.3rem; }
+            .card p { font-size: 1rem; }
+        }
+
+        /* رسوم متحركة للنجوم */
+        .star {
+            position: fixed;
+            pointer-events: none;
+            animation: starFloat 2s linear infinite;
+        }
+
+        @keyframes starFloat {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="apology-card">
+        <h2>🌹 رسالة اعتذار 🌹</h2>
+        <p class="apology-text">
+            "هدى الغالية،<br>
+            أعلم أنني كنت غائبًا عن احتفالاتك الصغيرة والكبيرة<br>
+            منذ أولى ابتدائي حتى ثانية جامعة،<br>
+            لكن كل إنجاز كنت أحتفل بك في قلبي<br>
+            وهذه الصفحة تحمل كل التهاني التي لم أنطق بها<br>
+            اعتذر عن كل مرة لم أكن فيها بجانبك<br>
+            وها أنا اليوم أجمع كل سنوات التميز في مكان واحد<br>
+            مبروك لنا كل هذه الإنجازات الرائعة! 🌸"
+        </p>
+    </div>
+
+    <h1>مبروك هدى! 🎉</h1>
+
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="cards-container">
+        <div class="card">
+            <h2><span class="emoji">🎓</span>تخرج من الإعدادية</h2>
+            <p>ألف مبروك على هذا الإنجاز الرائع! بداية مشرقة لرحلة نجاح طويلة.</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">💻</span>نجاح كورس أول - أولى حاسبات</h2>
+            <p>أحسنتِ صنعًا! أولى خطواتك في هندسة الحاسبات تثبت تميزك.</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🚀</span>نجاح كورس ثاني - أولى حاسبات</h2>
+            <p>واصلِ التقدم! كل إنجاز جديد هو دليل على إصرارك.</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="emoji">🌟</span>نجاح كورس أول - ثانية حاسبات</h2>
+            <p>ها أنتِ تتخطين التحديات واحدة تلو الأخرى، مبروك هذا النجاح!</p>
+        </div>
+    </div>
+
+    <div class="share-buttons">
+        <button class="share-btn">📱</button>
+        <button class="share-btn">📩</button>
+        <button class="share-btn">💬</button>
+    </div>
+
+    <script>
+        // تأثير الكونفيتي المخصص
+        function celebrate() {
+            confetti({
+                particleCount: 50,
+                spread: 50,
+                origin: { y: 0.6 },
+                colors: ['#fff', '#fbc2eb'],
+                disableForReducedMotion: true
+            });
+        }
+
+        // تفعيل النقر للبطاقات
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                celebrate();
+                createStarEffect(card);
+            });
+        });
+
+        // إنشاء تأثير النجوم
+        function createStarEffect(element) {
+            for(let i = 0; i < 5; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = element.getBoundingClientRect().left + 'px';
+                star.style.top = element.getBoundingClientRect().top + 'px';
+                star.innerHTML = '✨';
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 2000);
+            }
+        }
+
+        // تفعيل المشاركة
+        document.querySelectorAll('.share-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(navigator.share) {
+                    navigator.share({
+                        title: 'تهاني لهدى',
+                        text: 'انظر إلى هذه الرسالة الرائعة!',
+                        url: window.location.href
+                    });
+                }
+            });
+        });
+
+        // تحريك شريط التقدم
+        window.addEventListener('scroll', () => {
+            const progress = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.progress-bar').style.width = progress + '%';
+        });
+
+    </script>
+</body>
+</html>

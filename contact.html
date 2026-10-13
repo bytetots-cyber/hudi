@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرسال رسالة إلى بوت التليجرام</title>
+
+    <style>
+        /* تعيين خلفية بنفسجية */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad); /* خلفية بنفسجية */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* تنسيق النموذج */
+        form {
+            background-color: rgba(255, 255, 255, 0.2); /* خلفية شفافة قليلاً */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            max-width: 100%;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+            color: #fff;
+        }
+
+        /* تصميم حقل النص */
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #f0e6f7;
+            color: #333;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            border: 2px solid #8e44ad;
+            background-color: #e8d0f7;
+        }
+
+        /* تصميم الزر */
+        button {
+            background-color: #8e44ad; /* لون بنفسجي */
+            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #9b59b6;
+            transform: scale(1.1);
+        }
+
+        button:active {
+            background-color: #7b3d92;
+        }
+
+    </style>
+</head>
+<body>
+    <form action="./contact/send" method="POST">
+        <input type="hidden" name="_token" value="pTpebgiUsYD7EvLMZZbG5nC16bQMk0IYcz8wLmlo" autocomplete="off">        <h1>إرسال رسالة إلى بوت التليجرام</h1>
+        <label for="message">الرسالة:</label><br>
+        <textarea name="message" id="message" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="submit">إرسال</button>
+    </form>
+</body>
+</html>

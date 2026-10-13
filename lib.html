@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>مختبر السحر</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+    :root {
+      --purple: #8A2BE2;
+      --pink: #FF69B4;
+      --gold: #FFD700;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(45deg, #1a0630, #0b0220);
+      color: white;
+      touch-action: manipulation;
+    }
+
+    .magic-lab {
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: auto;
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      background: linear-gradient(45deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .crystal-ball {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--purple));
+      border-radius: 50%;
+      margin: 2rem auto;
+      position: relative;
+      cursor: pointer;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 0 50px rgba(138,43,226,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    .crystal-ball:active {
+      transform: scale(0.95);
+    }
+
+    .crystal-ball::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 60%, rgba(255,255,255,0.2));
+      border-radius: 50%;
+    }
+
+    .prophecy-text {
+      font-size: 1.2rem;
+      text-align: center;
+      background: linear-gradient(45deg, var(--pink), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textGlow 2s ease-in-out infinite;
+      padding: 0.5rem;
+      z-index: 2;
+    }
+
+    .spell-generator {
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .spell-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid var(--purple);
+      border-radius: 15px;
+      padding: 1rem;
+      color: white;
+      font-size: 1.1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+      caret-color: var(--pink);
+    }
+
+    .spell-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .spell-input:focus {
+      box-shadow: 0 0 30px rgba(138,43,226,0.3);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .magic-button {
+      background: linear-gradient(45deg, var(--purple), var(--pink));
+      border: none;
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(138,43,226,0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .magic-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.2) 50%, transparent 75%);
+      animation: buttonShine 3s infinite;
+    }
+
+    .magic-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255,105,180,0.6);
+    }
+
+    .ingredient-mixer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .ingredient {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 1.2rem;
+      text-align: center;
+      cursor: grab;
+      transition: all 0.3s ease;
+      color: white;
+      font-weight: bold;
+      user-select: none;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .ingredient:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(138,43,226,0.3);
+    }
+
+    .sparks-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: sparksFade 1s forwards;
+      z-index: 1000;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(255,105,180,0.5); }
+      50% { text-shadow: 0 0 20px rgba(255,215,0,0.8); }
+    }
+
+    @keyframes sparksFade {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+    }
+
+    @keyframes buttonShine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @media (max-width: 480px) {
+      h2 { font-size: 1.8rem; }
+      .crystal-ball { width: 160px; height: 160px; }
+      .prophecy-text { font-size: 1rem; }
+      .spell-input { font-size: 1rem; }
+      .magic-button { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+<section class="magic-lab">
+  <h2>🔮 مختبر السحر</h2>
+
+  <div class="crystal-ball" onclick="showProphecy()">
+    <div class="prophecy-text" id="prophecy"></div>
+  </div>
+
+  <div class="spell-generator">
+    <input type="text" class="spell-input" placeholder="✍️ اكتب تعويذتك هنا..." oninput="animateText(this)" id="spellInput">
+    <button class="magic-button" onclick="saveSpell()">
+      <span>💾 حفظ التعويذة</span>
+    </button>
+    <div id="savedSpell" style="margin-top: 1rem; text-align:center; font-size:1rem; color:var(--gold);"></div>
+  </div>
+
+  <div class="ingredient-mixer">
+    <div class="ingredient" draggable="true">🌹 وردة الحب</div>
+    <div class="ingredient" draggable="true">🕊️ حمامة السلام</div>
+    <div class="ingredient" draggable="true">📜 رسالة هدى</div>
+    <div class="ingredient" draggable="true">🐦 رسول الهدهد</div>
+  </div>
+</section>
+
+<script>
+ const prophecies = [
+  "قلبك سيزهر بحبٍ صادق ينير روحك 💛",
+  "السلام سيسكن أيامك وتبتعد عنك الهموم 🌿",
+  "الهدهد سيأتيك ببشارة هدى من السماء 🕊️",
+  "نور الهداية سيقودك إلى الطريق الصحيح ✨",
+  "ستتفتح أمامك أبواب السكينة والطمأنينة 🔑",
+  "ستُحاط بمحبة نقية تملأ حياتك دفئًا ❤️",
+  "المشاكل ستنقشع كما ينقشع الضباب في الصباح 🌤️",
+  "الهدهد سيهمس لك بحكمة تريح بالك 📜"
+];
+
+
+  let currentProphecy = null;
+
+  function showProphecy() {
+    const prophecyElement = document.getElementById('prophecy');
+    let newProphecy;
+    do {
+      newProphecy = prophecies[Math.floor(Math.random() * prophecies.length)];
+    } while (newProphecy === currentProphecy);
+
+    currentProphecy = newProphecy;
+    prophecyElement.textContent = newProphecy;
+    createSparks();
+  }
+
+  function animateText(input) {
+    input.style.transform = `scale(${1 + (input.value.length * 0.02)})`;
+    input.style.background = `rgba(255,255,255,${Math.min(input.value.length * 0.02, 0.2)})`;
+  }
+
+  function saveSpell() {
+    const spellInput = document.getElementById('spellInput').value.trim();
+    const savedSpell = document.getElementById('savedSpell');
+    if (spellInput.length > 0) {
+      savedSpell.innerHTML = `🔖 تعويذتك المحفوظة: <strong>${spellInput}</strong>`;
+      document.getElementById('spellInput').value = '';
+    } else {
+      savedSpell.textContent = '⚠️ الرجاء كتابة تعويذة قبل الحفظ.';
+    }
+  }
+
+  function createSparks() {
+    const ball = document.querySelector('.crystal-ball');
+    const sparks = document.createElement('div');
+    sparks.className = 'sparks-effect';
+    ball.appendChild(sparks);
+    setTimeout(() => sparks.remove(), 1000);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رسالة اعتذار مع وردة</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #ff6f91, #ff9671, #ffc75f);
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      max-width: 400px;
+      position: relative;
+    }
+
+    .flower {
+      font-size: 5rem;
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+    }
+
+    .date {
+      font-size: 1.3rem;
+      color: #ffe6e6;
+      margin-top: 10px;
+      background: rgba(255, 111, 145, 0.3);
+      padding: 8px 15px;
+      border-radius: 15px;
+      display: inline-block;
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+      font-weight: bold;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+      letter-spacing: 2px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .message {
+      font-size: 1.5rem;
+      color: #fff;
+      margin-top: 20px;
+      line-height: 1.8;
+      text-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .button-back {
+      margin-top: 30px;
+      padding: 12px 25px;
+      background: linear-gradient(to right, #ff6f91, #ff9671);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .button-back:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 111, 145, 0.7);
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="flower">🌹</div>
+  <div class="date">٢٨ / ٤ / ٢٠٢٥ ✨</div> <!-- تاريخ جميل مع تأثير -->
+  <div class="message">
+    أعتذر لك من قلبي...<br>
+    لم أقصد أن أزعلك،<br>
+    وجودك يعني لي الكثير 💖
+  </div>
+  <a href="/welcome" class="button-back">العودة إلى السحر ✨</a>
+</div>
+
+</body>
+</html>

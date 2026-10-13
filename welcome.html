@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عالم هدى السحري ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+</head>
+
+<body class="min-h-screen relative overflow-hidden">
+    <!-- Three.js Canvas -->
+    <canvas class="webgl fixed top-0 left-0 -z-10"></canvas>
+
+    <!-- محتوى الصفحة -->
+    <div class="text-center text-white z-10 relative h-screen flex flex-col items-center justify-center">
+        <h1 class="text-6xl font-bold mb-8 animate-fade-in-up">مرحبًا بكم في عالم هدى السحري  </h1>
+
+        <button id="magicButton"
+            class="magic-button px-12 py-8 bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-700 text-white rounded-full text-4xl shadow-2xl transition-all duration-500 hover:shadow-3xl">
+            <a href="./welcome1" class="text-white">اكتشف السحر 🪄</a>
+        </button>
+
+        <!-- Floating Elements Container -->
+        <div id="floatingEffects" class="fixed top-0 left-0 w-full h-full pointer-events-none"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // ============ Three.js Galaxy Setup ============
+
+        const scene = new THREE.Scene();
+        const canvas = document.querySelector('canvas.webgl');
+        const sizes = { width: window.innerWidth, height: window.innerHeight };
+
+        // Camera Setup
+        const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+        camera.position.set(3, 3, 3);
+        scene.add(camera);
+
+        // Renderer with Violet Background
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setClearColor(0x2b004d);
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Galaxy Parameters with Violet Colors
+        const parameters = {
+            count: 500000,
+            size: 0.008,
+            radius: 9,
+            branches: 7,
+            spin: 1.8,
+            randomness: 0.7,
+            randomnessPower: 3,
+            insideColor: '#ff80f0',
+            outsideColor: '#4a0080',
+            rotationSpeed: 0.5,
+            pulseSpeed: 1.8
+        };
+
+        // Galaxy Generation
+        let galaxy = null;
+        const generateGalaxy = () => {
+            if (galaxy) scene.remove(galaxy);
+
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(parameters.count * 3);
+            const colors = new Float32Array(parameters.count * 3);
+            const colorInside = new THREE.Color(parameters.insideColor);
+            const colorOutside = new THREE.Color(parameters.outsideColor);
+
+            for (let i = 0; i < parameters.count; i++) {
+                const i3 = i * 3;
+                const radius = Math.random() * parameters.radius;
+                const spinAngle = radius * parameters.spin;
+                const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+
+                const randomX = Math.pow(Math.random(), parameters.randomnessPower) * parameters.randomness * (Math.random() < 0.5 ? 1 : -1);
+                const randomY = Math.pow(Math.random(), parameters.randomnessPower) * parameters.randomness * (Math.random() < 0.5 ? 1 : -1);
+                const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * parameters.randomness * (Math.random() < 0.5 ? 1 : -1);
+
+                positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+                positions[i3 + 1] = randomY;
+                positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+                const mixedColor = colorInside.clone().lerp(colorOutside, radius / parameters.radius);
+                colors[i3] = mixedColor.r;
+                colors[i3 + 1] = mixedColor.g;
+                colors[i3 + 2] = mixedColor.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: parameters.size,
+                sizeAttenuation: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending,
+                vertexColors: true
+            });
+
+            galaxy = new THREE.Points(geometry, material);
+            galaxy.rotation.x = Math.PI * 0.5;
+            scene.add(galaxy);
+        };
+
+        // Special Effects
+        const addSpecialEffects = () => {
+            // Nebula Effect
+            const nebulaGeometry = new THREE.SphereGeometry(12, 32, 32);
+            const nebulaMaterial = new THREE.MeshBasicMaterial({
+                color: 0x8a2be2,
+                transparent: true,
+                opacity: 0.15
+            });
+            const nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+            scene.add(nebula);
+
+            // Lighting Effects
+            const ambientLight = new THREE.AmbientLight(0x9370DB, 0.4);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xff80f0, 1.5, 50);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+        };
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+        const animate = () => {
+            const elapsedTime = clock.getElapsedTime();
+
+            if (galaxy) {
+                galaxy.rotation.y = elapsedTime * parameters.rotationSpeed;
+                const scale = Math.sin(elapsedTime * parameters.pulseSpeed) * 0.15 + 1;
+                galaxy.scale.set(scale, scale, scale);
+            }
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        };
+
+        // Initial Setup
+        generateGalaxy();
+        addSpecialEffects();
+        animate();
+
+        // ============ Button Effects ============
+
+        const magicButton = document.getElementById('magicButton');
+
+        magicButton.addEventListener('click', () => {
+            createParticles();
+            createMusicNotes();
+            magicButton.classList.add('active');
+            setTimeout(() => magicButton.classList.remove('active'), 1000);
+        });
+
+        const createParticles = () => {
+            const container = document.getElementById('floatingEffects');
+            const emojis = ['🌸U', '✨V', '🦋O', '💖I', ' 🦄L','🌈E'];
+
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle absolute text-4xl';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                const duration = 2 + Math.random() * 2;
+                const angle = Math.random() * 360;
+                const distance = 100 + Math.random() * 200;
+
+                particle.style.animation = `
+                    particle-float ${duration}s ease-out forwards,
+                    particle-spin ${duration}s linear
+                `;
+
+                particle.style.setProperty('--distance', `-${distance}px`);
+                particle.style.setProperty('--angle', `${angle}deg`);
+
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), duration * 1000);
+            }
+        };
+
+        const createMusicNotes = () => {
+            const container = document.getElementById('floatingEffects');
+            const notes = ['🎵', '🎶'];
+
+            for (let i = 0; i < 8; i++) {
+                const note = document.createElement('div');
+                note.className = 'music-note absolute text-3xl';
+                note.style.left = 50 + Math.cos((i / 4) * Math.PI) * 40 + '%';
+                note.style.top = '60%';
+                note.textContent = notes[i % 2];
+
+                note.style.animation = `music-float 2s ${i * 0.1}s ease-out forwards`;
+                container.appendChild(note);
+                setTimeout(() => note.remove(), 2000);
+            }
+        };
+
+        // Window Resize Handler
+        window.addEventListener('resize', () => {
+            sizes.width = window.innerWidth;
+            sizes.height = window.innerHeight;
+            camera.aspect = sizes.width / sizes.height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(sizes.width, sizes.height);
+        });
+    </script>
+
+    <style>
+        @keyframes particle-float {
+            to {
+                transform: translate(
+                    calc(var(--distance) * cos(var(--angle))),
+                    calc(var(--distance) * sin(var(--angle)))
+                );
+                opacity: 0;
+            }
+        }
+
+        @keyframes particle-spin {
+            to { transform: rotate(720deg); }
+        }
+
+        @keyframes music-float {
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .magic-button {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            border: 2px solid #ff80f0;
+            box-shadow: 0 0 30px rgba(255, 128, 240, 0.3);
+            animation: button-glow 2s infinite alternate;
+        }
+
+        .magic-button:hover {
+            transform: rotateY(15deg) rotateX(10deg) scale(1.1);
+            box-shadow: 0 25px 50px rgba(255, 105, 180, 0.6);
+        }
+
+        @keyframes button-glow {
+            from { box-shadow: 0 0 20px rgba(255, 128, 240, 0.3); }
+            to { box-shadow: 0 0 40px 15px rgba(255, 128, 240, 0.5); }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 1s ease-out;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(50px); }
+        }
+
+        .particle, .music-note {
+            will-change: transform, opacity;
+        }
+    </style>
+</body>
+</html>

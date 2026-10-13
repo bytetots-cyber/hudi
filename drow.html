@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحديقة البنفسجية</title>
+    <style>
+        :root {
+            --main-purple: #6C3082;
+            --dark-purple: #4A1E5C;
+            --light-purple: #9D6BAB;
+            --neon-purple: #C56CE6;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-purple), var(--main-purple));
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+            overflow: hidden;
+            padding: 0 1rem;
+            touch-action: manipulation;
+        }
+
+        .glow-effect {
+            position: absolute;
+            width: 150vmax;
+            height: 150vmax;
+            background: radial-gradient(circle, var(--neon-purple) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: glowMove 40s infinite linear;
+            z-index: 0;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-purple);
+            color: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-purple);
+            backdrop-filter: blur(3px);
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin: 2rem 0;
+            text-shadow: 0 0 15px var(--neon-purple);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+        }
+
+        #canvas {
+            width: 100%;
+            max-width: 600px;
+            height: 60vh;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+            cursor: crosshair;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s;
+        }
+
+        #canvas:hover {
+            transform: scale(1.02);
+        }
+
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--main-purple), var(--light-purple));
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: buttonGlow 3s infinite;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .emoji-text {
+            font-size: 24px;
+            position: absolute;
+            pointer-events: none;
+            animation: float 3s ease-out forwards;
+            filter: drop-shadow(0 0 5px var(--neon-purple));
+        }
+
+        @keyframes glowMove {
+            0% { transform: translate(-30%, -30%) rotate(0deg); }
+            100% { transform: translate(-30%, -30%) rotate(360deg); }
+        }
+
+        @keyframes glowMoveMobile {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+        }
+
+        @keyframes buttonGlow {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            #canvas {
+                touch-action: none;
+            }
+
+            .glow-effect {
+                animation: glowMoveMobile 60s infinite linear;
+                opacity: 0.03;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-effect"></div>
+    <button class="back-btn" onclick="history.back()">🔙 رجوع</button>
+
+    <div class="container">
+        <h1>ارسم قلبًا سحريًا 💜</h1>
+        <canvas id="canvas"></canvas>
+        <div class="controls">
+            <button onclick="clearCanvas()">
+                <span>🗑️ مسح الرسمة</span>
+            </button>
+            <button onclick="saveDrawing()">
+                <span>💾 حفظ الرسمة</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function getCanvasPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            const pos = getCanvasPosition(e);
+            draw(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            const pos = getCanvasPosition(e);
+            draw(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getCanvasPosition(e.touches[0]);
+            draw(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getCanvasPosition(e.touches[0]);
+            draw(pos.x, pos.y);
+        });
+
+        canvas.addEventListener('touchend', () => isDrawing = false);
+
+        function draw(x, y) {
+            const emoji = '🪻';
+            const fontSize = 28;
+            ctx.font = `${fontSize}px Arial`;
+            ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 60%)`;
+
+            for (let i = 0; i < 3; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 10;
+                const dx = x + Math.cos(angle) * radius;
+                const dy = y + Math.sin(angle) * radius;
+
+                ctx.save();
+                ctx.translate(dx, dy);
+                ctx.rotate(Math.random() * Math.PI / 4);
+                ctx.fillText(emoji, 0, 0);
+                ctx.restore();
+            }
+
+            createFloatingEmoji(x, y);
+        }
+
+        function createFloatingEmoji(x, y) {
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji-text';
+            emoji.style.left = `${x}px`;
+            emoji.style.top = `${y}px`;
+            emoji.textContent = '🌸🌺🌷';
+            emoji.style.fontSize = `${Math.random() * 20 + 20}px`;
+            emoji.style.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            document.body.appendChild(emoji);
+
+            setTimeout(() => emoji.remove(), 3000);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawing() {
+            const link = document.createElement('a');
+            link.download = 'رسمتي-السحرية.png';
+            link.href = canvas.toDataURL();
+            link.click();
+
+            const confetti = document.createElement('div');
+            confetti.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                font-size: 3rem;
+                transform: translate(-50%, -50%);
+                animation: pop 1s ease-out;
+                color: var(--neon-purple);
+                text-shadow: 0 0 20px var(--neon-purple);
+                pointer-events: none;
+            `;
+            confetti.textContent = '✨ تم الحفظ! ✨';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 1000);
+        }
+    </script>
+</body>
+</html>
